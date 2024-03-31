@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <!-- Title for the form -->
+  <h2>Angular Team Registration</h2>
+
+  <!-- Start of the form with formGroup directive -->
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Displaying the form value as JSON (for debugging) -->
+    {{registrationForm.value | json}}
+
+    <!-- Form input for username -->
+    <div class="form-group">
+      <label>Username</label>
+      <!-- Input field for username with validation classes -->
+      <input [class.is-invalid]="registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched" formControlName="userName" type="text" class="form-control">
+      <!-- Validation messages for username -->
+      <div *ngIf="userName?.invalid && userName?.touched">
+        <small *ngIf="userName?.errors?.['required']" class="text-danger">Username is required</small>
+        <small *ngIf="userName?.errors?.['minlength']" class="text-danger">Username must be at least 3 characters</small>
+        <small *ngIf="userName?.errors?.['forbiddenName']" class="text-danger">Username not allowed</small>
+      </div>
+    </div>
+
+    <!-- Form input for email -->
+    <div class="form-group">
+      <label>Email</label>
+      <!-- Button to add additional email addresses -->
+      <button type="button" class="btn btn-secondary btn-sm m-2" (click)="addAdditionalEmail()">Add More Emails</button>
+      <!-- Input field for email with validation classes -->
+      <input [class.is-invalid]="email?.invalid && email?.touched" type="text" formControlName="email" class="form-control">
+      <!-- Validation message for email -->
+      <small class="text-danger" [class.d-none]="email?.valid || email?.untouched">Email is required</small>
+      
+      <!-- Form inputs for additional email addresses -->
+      <div formArrayName="additionalEmails" *ngFor="let link of additionalEmails.controls; let i = index">
+        <input type="text" class="form-control my-1" [formControlName]="i">
+      </div>
+    </div>
+
+    <!-- Form input for password -->
+    <div class="form-group">
+      <label>Password</label>
+      <input formControlName="password" type="password" class="form-control">
+    </div>
+
+    <!-- Form input for confirming password -->
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input [class.is-invalid]="registrationForm.errors?.['misMatch']" formControlName="confirmPassword" type="password" class="form-control">
+      <!-- Validation message for password mismatch -->
+      <small class="text-danger" *ngIf="registrationForm.errors?.['misMatch']">Passwords do not match</small>
+    </div>
+
+    <!-- Form inputs for skills -->
+    <div formGroupName="skill">
+      <div class="form-group">
+        <label>Angular Experience Level</label>
+        <input formControlName="angularLevel" type="text" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Github Link</label>
+        <input formControlName="githubLink" type="text" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Portfolio Website</label>
+        <input formControlName="portfolioLink" type="text" class="form-control">
+      </div>
+    </div>
+
+    <!-- Checkbox for notification -->
+    <div class="form-check mb-3">
+      <input class="form-check-input" formControlName="notify" type="checkbox">
+      <label class="form-check-label">Notify Me</label>
+    </div>
+
+    <!-- Submit button and button to load sample data -->
+    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="button" (click)="loadSampleData()" class="btn btn-secondary">Load Sample Data</button>
+  </form>
+</div>
